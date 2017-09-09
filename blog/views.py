@@ -32,12 +32,14 @@ def entries(page=1):
         total_pages=total_pages
     )
 
+#acquires entry
 @app.route("/entry/add", methods=["GET"])
 def add_entry_get():
     return render_template("add_entry.html")
     
 from flask import request, redirect, url_for
 
+#provides means of posting content on the main page
 @app.route("/entry/add", methods=["POST"])
 def add_entry_post():
     entry = Entry(
@@ -47,3 +49,26 @@ def add_entry_post():
     session.add(entry)
     session.commit()
     return redirect(url_for("entries"))
+
+#acquires entries on an individual # basis
+@app.route("/entry/<int:id>")
+def entry_id(id):
+    entry_unid = session.query(Entry).get(id)
+    return render_template("entry_id.html", entry=entry)
+    
+#edits each entries
+@app.route("/entry/<int:id>/edit")
+def entry_id_edit(id):
+    entry_unid = session.query(Entry).get(id)
+    return render_template("edit_unid_entry.html")
+    
+#deletes entries    
+@app.route("/entry/<int:id>delete", methods["DELETE"])
+def delete_entry_post(id):
+    entry_unid = session.query(Entry).get(id)
+    return render_template("delete_entry.html")
+    
+#limits entries based on number provided
+@app.route("/?limit=20")
+@app.route("/page/2?limit=20")
+def entry_limit() = ""
