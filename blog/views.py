@@ -50,6 +50,10 @@ def add_entry_post():
     session.commit()
     return redirect(url_for("entries"))
 
+@app.route("/login", methods=["GET"])
+def login_get():
+    return render_template("login.html")
+
 #acquires entries on an individual # basis
 @app.route("/entry/<int:id>")
 def entry_id(id):
@@ -72,3 +76,20 @@ def delete_entry_post(id):
 @app.route("/?limit=20")
 @app.route("/page/2?limit=20")
 def entry_limit() = ""
+
+from flask import flash
+from flask_login import login_user
+from werkzeug.security import check_password_hash
+from .database import User
+
+@app.route("/login", methods=["POST"])
+def login_post():
+    email = request.form["email"]
+    password = request.form["password"]
+    user = session.query(User).filter_by(email=email).first()
+    if not user or not check_password_hash(user.password, password):
+        flash("Incorrect username or password", "danger")
+        return redirect(url_for("login_get"))
+
+    login_user(user)
+    return redirect(request.args.get('next') or url_for("entries"))
