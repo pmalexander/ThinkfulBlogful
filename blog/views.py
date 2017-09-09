@@ -3,6 +3,11 @@ from flask import render_template
 from . import app
 from .database import session, Entry
 
+from flask import flash
+from flask_login import login_user
+from werkzeug.security import check_password_hash
+from .database import User
+
 PAGINATE_BY = 10
 
 @app.route("/")
@@ -32,15 +37,31 @@ def entries(page=1):
         total_pages=total_pages
     )
 
+@app.route("/login", methods=["POST"])
+def login_post():
+    email = request.form["email"]
+    password = request.form["password"]
+    user = session.query(User).filter_by(email=email).first()
+    if not user or not check_password_hash(user.password, password):
+        flash("Incorrect username or password", "danger")
+        return redirect(url_for("login_get"))
+
+    login_user(user)
+    return redirect(request.args.get('next') or url_for("entries"))
+    
 #acquires entry
+from flask_login import login_required
+
 @app.route("/entry/add", methods=["GET"])
+@login_required
 def add_entry_get():
     return render_template("add_entry.html")
-    
+
 from flask import request, redirect, url_for
 
 #provides means of posting content on the main page
 @app.route("/entry/add", methods=["POST"])
+@login_required
 def add_entry_post():
     entry = Entry(
         title=request.form["title"],
@@ -60,13 +81,14 @@ def entry_id(id):
     entry_unid = session.query(Entry).get(id)
     return render_template("entry_id.html", entry=entry)
     
-#edits each entries
+#edits each entries, requires login information to utilize
 @app.route("/entry/<int:id>/edit")
+@login_required
 def entry_id_edit(id):
     entry_unid = session.query(Entry).get(id)
     return render_template("edit_unid_entry.html")
     
-#deletes entries    
+#deletes entries, requires login information to utilize   
 @app.route("/entry/<int:id>delete", methods["DELETE"])
 def delete_entry_post(id):
     entry_unid = session.query(Entry).get(id)
@@ -77,19 +99,6 @@ def delete_entry_post(id):
 @app.route("/page/2?limit=20")
 def entry_limit() = ""
 
-from flask import flash
-from flask_login import login_user
-from werkzeug.security import check_password_hash
-from .database import User
 
-@app.route("/login", methods=["POST"])
-def login_post():
-    email = request.form["email"]
-    password = request.form["password"]
-    user = session.query(User).filter_by(email=email).first()
-    if not user or not check_password_hash(user.password, password):
-        flash("Incorrect username or password", "danger")
-        return redirect(url_for("login_get"))
 
-    login_user(user)
-    return redirect(request.args.get('next') or url_for("entries"))
+
