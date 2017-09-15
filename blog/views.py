@@ -75,6 +75,11 @@ def add_entry_post():
 def login_get():
     return render_template("login.html")
 
+@app.route(".login", methods=["POST"])
+def login_user_pass():
+    user=request.form["User"]
+    password=request.form["Password"]
+
 #acquires entries on an individual # basis
 @app.route("/entry/<int:id>")
 def entry_id(id):
@@ -97,7 +102,7 @@ def delete_entry_post(id):
 #limits entries based on number provided
 @app.route("/?limit=20")
 @app.route("/page/2?limit=20")
-def entry_limit() = ""
+
 
 
 
