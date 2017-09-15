@@ -86,15 +86,16 @@ def entry_id(id):
     entry_unid = session.query(Entry).get(id)
     return render_template("entry_id.html", entry=entry)
     
-#edits each entries, requires login information to utilize
+#edits each entries, requires login information to utilize editing feature, returns edited entry
 @app.route("/entry/<int:id>/edit")
 @login_required
 def entry_id_edit(id):
     entry_unid = session.query(Entry).get(id)
     return render_template("edit_unid_entry.html")
     
-#deletes entries, requires login information to utilize   
-@app.route("/entry/<int:id>delete", methods["DELETE"])
+#deletes entries, requires login information to utilize before deletion   
+@app.route("/entry/<int:id>delete", methods["GET", "POST"])
+@alogin_required
 def delete_entry_post(id):
     entry_unid = session.query(Entry).get(id)
     return render_template("delete_entry.html")
