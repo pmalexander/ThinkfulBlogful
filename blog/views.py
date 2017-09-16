@@ -7,11 +7,9 @@ from flask import flash
 from flask_login import login_user
 from flask_login import logout_user
 from flask_login import login_required
-from flask_login import login_manager
 from werkzeug.security import check_password_hash
 from flask import request, redirect, url_for
 from .database import User
-
 
 #opens page to populate 20 entries per instance
 PAGINATE_BY = 20
@@ -84,6 +82,7 @@ def add_entry():
     entry = Entry(
         title=request.form["title"],
         content=request.form["content"],
+        author=current_user
     )
     session.add(entry)
     session.commit()
