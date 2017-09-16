@@ -7,6 +7,7 @@ from flask import flash
 from flask_login import login_user
 from flask_login import logout_user
 from flask_login import login_required
+from flask_login import login_manager
 from werkzeug.security import check_password_hash
 from flask import request, redirect, url_for
 from .database import User
@@ -93,7 +94,7 @@ def add_entry():
 def unique_entry_id(id):
     entry_unid = session.query(Entry).get(id)
     print (entry_unid)
-    return render_template("entry_id.html", unique_entry_id=unique_entry_id
+    return render_template("entry_unid.html", entry_unid=entry_unid
     )
     
 #edits entries, requires login information to utilize editing feature, retrieves specific entry
@@ -127,6 +128,8 @@ def delete_entry(id):
     return render_template("delete_entry.html")
     
 #provides logged user ability to logout
-#@app.route("/logout")
-#@login.required
-#def user_logout(id)
+@app.route("/logout", methods=["GET]"])
+@login_required
+def user_logout(id):
+    logout_user()
+    return redirect(url_for('entries'))
