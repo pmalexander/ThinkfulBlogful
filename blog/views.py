@@ -5,6 +5,7 @@ from .database import session, Entry
 
 from flask import flash
 from flask_login import login_user
+from flask import login_required
 from werkzeug.security import check_password_hash
 from .database import User
 
@@ -103,8 +104,3 @@ def delete_entry_post(id):
 #limits entries based on number provided
 @app.route("/?limit=20")
 @app.route("/page/2?limit=20")
-
-
-
-
-
