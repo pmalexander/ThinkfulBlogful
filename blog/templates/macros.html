@@ -1,11 +1,14 @@
 {% macro render_entry(entry) %}
 <div class="row">
     <div class="col-md-2 text-right metadata">
+        <div>
+            {{ entry.author.name }}
         <ul class="list-unstyled">
             <li>
                 {{ entry.datetime | dateformat("%d/%m/%y") }}
             </li>
         </ul>
+        </div>
     </div>
     <div class="col-md-10">
         <h1>

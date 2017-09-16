@@ -7,6 +7,7 @@ from flask import flash
 from flask_login import login_user
 from flask_login import logout_user
 from flask_login import login_required
+from flask_login import login_manager
 from werkzeug.security import check_password_hash
 from flask import request, redirect, url_for
 from .database import User
@@ -75,6 +76,8 @@ def login_entry():
 def add_entry_get():
     return render_template("add_entry.html")
 
+from flask_login import current_user
+
 @app.route("/entry/add", methods=["POST"])
 @login_required
 def add_entry():
@@ -90,7 +93,7 @@ def add_entry():
 @app.route("/entry/<int:id>")
 def unique_entry_id(id):
     entry_unid = session.query(Entry).get(id)
-    print entry_unid
+    print (entry_unid)
     return render_template("entry_id.html", unique_entry_id=unique_entry_id
     )
     
