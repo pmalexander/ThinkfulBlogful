@@ -116,8 +116,12 @@ def entry_id_edit_p(id):
 #deletes entries, requires login information to utilize before deletion   
 @app.route("/entry/<int:id>delete", methods=["GET", "POST"])
 @login_required
-def delete_entry_post(id):
+def delete_entry(id):
     entry_unid = session.query(Entry).get(id)
+    session.query(Entry).get(id).delete(id)
+    session.commit()
+    return redirect(url_for('entries'))
+    
     return render_template("delete_entry.html")
     
 #provides logged user ability to logout

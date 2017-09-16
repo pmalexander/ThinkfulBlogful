@@ -6,6 +6,7 @@ import mistune as md
 def markdown(text):
     return Markup(md.markdown(text,escape=True))
 
+#returns the date
 @app.template_filter()
 def dateformat(date, format):
     if not date:
