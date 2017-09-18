@@ -51,11 +51,6 @@ def entries(page=1):
 def login_get():
     return render_template("login.html")
 
-@app.route("/login", methods=["POST"])
-def login_user_pass():
-    user=request.form["User"]
-    password=request.form["Password"]
-    
 #prompts user login using stored e-mail and password, redirects upon failure to provide appropriate information
 @app.route("/login", methods=["POST"])
 def login_entry():
@@ -92,7 +87,7 @@ def add_entry():
 #allows users to acquire entries on an individual numbered basis
 @app.route("/entry/<int:id>")
 def unique_entry_id(id):
-    entry_unid = session.query(Entry).get(id)
+    entry_unid = session.query(Entry).filter(Entry.id == id).first()
     print (entry_unid)
     return render_template("entry_unid.html", entry_unid=entry_unid
     )
@@ -130,6 +125,6 @@ def delete_entry(id):
 #provides logged user ability to logout
 @app.route("/logout", methods=["GET]"])
 @login_required
-def user_logout(id):
+def user_logout():
     logout_user()
     return redirect(url_for('entries'))
