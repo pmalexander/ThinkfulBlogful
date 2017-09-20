@@ -6,6 +6,7 @@ from blog.database import Base
 
 manager = Manager(app)
 
+#retains
 class DB(object):
     def __init__(self, metadata):
         self.metadata = metadata
@@ -46,7 +47,7 @@ def adduser():
 
     password = ""
     password_2 = ""
-    while len(password, password_2) < 8 or password != password_2:
+    while len(password and password_2) < 8 or password != password_2:
         password = getpass("Password: ")
         password_2 = getpass("Re-enter password: ")
     user = User(name=name, email=email,

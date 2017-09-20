@@ -85,11 +85,10 @@ def add_entry():
     return redirect(url_for("entries"))
 
 #allows users to acquire entries on an individual numbered basis
-@app.route("/entry/<int:id>")
-def unique_entry_id(id):
-    entry_unid = session.query(Entry).filter(Entry.id == id).first()
-    print (entry_unid)
-    return render_template("entry_unid.html", entry_unid=entry_unid
+@app.route("/entry/<int:id>", methods=["GET"])
+def unique_id(id):
+    entry = session.query(Entry).filter(Entry.id == id).first()
+    return render_template("entry_id.html", entry=entry
     )
     
 #edits entries, requires login information to utilize editing feature, retrieves specific entry
