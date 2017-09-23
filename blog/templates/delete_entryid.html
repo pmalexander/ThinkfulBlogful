@@ -1,0 +1,19 @@
+{% import "macros.html" as macros %}
+{% extends "base.html" %}
+{% block content %}
+
+<h1>
+Delete entry?
+</h1>
+
+<div>
+{% for entry in entries %}
+{{ macros.render_entry(entry) }}
+{% endfor %} 
+</div>
+
+<div>
+<button type="submit" class="btn btn-default">Delete Entry</button>
+</div>
+
+{% endblock %}

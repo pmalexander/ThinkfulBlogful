@@ -96,7 +96,7 @@ def unique_id(id):
 @login_required
 def entry_id_edit_g(id):
     entry_unid = session.query(Entry).get(id)
-    return render_template("entry_id_edit.html", entry_unid=entry_unid
+    return render_template("entry_edit.html", entry_unid=entry_unid
     )
 
 #edits entries, requires login informatino to utilize editing feature, applies edits to entry
@@ -108,19 +108,20 @@ def entry_id_edit_p(id):
     entry_unid.content = (request.form["content"])
     
     session.commit()
-    return redirect(url_for("entry"))
+    return redirect(url_for("entries"))
 
 #deletes entries, requires login information to utilize before deletion   
-@app.route("/entry/<int:id>delete", methods=["GET", "POST"])
+@app.route("/entry/<int:id>/delete", methods=["GET", "POST"])
 @login_required
-def delete_entry(id):
+def delete_entryid(id):
     entry_unid = session.query(Entry).get(id)
     session.query(Entry).get(id).delete(id)
     session.commit()
-    return redirect(url_for('entries'))
-    
-    return render_template("delete_entry.html")
-    
+    if current_user == entry_unid.author:
+        return render_template("delete_entryid.html", id=id, entry_unid=entry_unid)
+    else:
+        return redirect(url_for('entries'))
+        
 #provides logged user ability to logout
 @app.route("/logout", methods=["GET]"])
 @login_required
