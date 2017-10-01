@@ -46,6 +46,12 @@ def entries(page=1):
 @app.route("/?limit=20")
 @app.route("/page/2?limit=20")
 
+#grants users access to registration page, allows login priveleges (add/edit/delete entries)
+@app.route("/registration", methods=["GET", "POST"])
+def registration():
+    if request.method == "GET":
+        return render_template("registration.html")
+
 #prompts user to login to gain access privileges to delete and edit functions, login required to delete and edit
 @app.route("/login", methods=["GET"])
 def login_get():
@@ -127,4 +133,5 @@ def delete_entryid(id):
 @login_required
 def user_logout():
     logout_user()
+    flash("You have been logged out.")
     return redirect(url_for('entries'))
